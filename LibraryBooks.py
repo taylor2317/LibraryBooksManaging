@@ -28,26 +28,29 @@ class Books:
         self.book_type = book_type
         self.book_copies = book_copies
     
+# books_library = [{"book's ID": [],  #:book_id,
+#                   "book's Name": [],  #:book_name,
+#                   "book's Authors": [],  #:book_author,
+#                   "book's Published year": [],  #:book_published_year,
+#                   "book's Type": [],  #:book_type,
+#                   "book's Copies": []}]
+books_library = {"Books": []}
 
 def add_new_book(book_id,book_name,book_author,book_published_year,book_type,book_copies):
-    new_book = ["book's ID", #:book_id,
-                    "book's Name",#:book_name,
-                    "book's Authors",#:book_author,
-                    "book's Published year",#:book_published_year,
-                    "book's Type",#:book_type,
-                    "book's Copies"]#:book_copies]
-    new_book["book's ID"].append(book_id)
-    new_book["book's Name"].append(book_name)
-    new_book["book's Authors"].append(book_author)
-    new_book["book's Published year"].append(book_published_year)
-    new_book["book's Type"].append(book_type)
-    new_book["book's Copies"].append(book_copies)
-    return  new_book
+    new_book = books_library["Books"].append({"Book's ID":{book_id},"Book's Name":{book_name},"Book's Authors":{book_author},"Book's Published year":{book_published_year},"Book's Type":{book_type},"Book's Copies":{book_copies}})
+    
+    with open('books_data.pkl', 'wb') as books_save:
+        pickle.dump(books_library, books_save)
+        
+    return new_book
 
 def display_all_books(books_library):
     """
     :return: all the books in the books, library
     """
+    with open('books_data.pkl', 'rb') as books_read:
+        books_library = pickle.load(books_read)
+    
     return books_library
     
 def find_book_by_name(book_name, books_library):
@@ -56,23 +59,35 @@ def find_book_by_name(book_name, books_library):
     :param book_name: The name of the book to search
     :param book_library: All the books in library"""
         
-    books_library_temp = copy.deepcopy(books_library)
-    if book_name in books_library_temp.keys():
-        for book in books_library_temp[book_name]:
-            books_library_temp[book_name] = books_library_temp[book]
-            return books_library_temp[book]
+    for book in range(len(books_library["Books"])):
+        if book_name in books_library["Books"][book]["Book's Name"]:
+            return f"{book_name} is in the customers library list"
     else:
-        return f"There is no such {book_name} book in the library."
+        return f"There is no such '{book_name}' book in the library."
     
-def delete_book(book_name, books_library={}):
+    
+def delete_book(book_name, books_library):
     """
     A function that update the collection of books that in the library, without deleting one.
     :param book_name: The name of the book to delete.
     :param books_library: A collection of all the books in library
     """
-    if book_name in books_library:
-        print(f"The book {book_name} has deleted from library")
-        books_library.pop(book_name)
-    else:
-        print(f"The book {book_name} does not exist!")
     
+    for book in range(len(books_library["Books"])):
+        if book_name in books_library["Books"][book]["Book's Name"]:
+            print(f"Are you sure you want delete '{book_name}' from the library?, y/n: ")
+            identifier = input()
+            identifiers = ['y','n']
+            while identifier not in identifiers:
+                print("Please answer with y or n")
+                print("Are you sure you want to delete this book?: ")
+                identifier = input()
+            if identifier == 'y':
+                books_library["Books"].pop(book)
+                return f"{book_name} is deleted from books library"
+            ## Todo : Find a way to delete book by his name (should delete all books details)
+            else:
+                print(f"The book {book_name} does not exist!")
+            if identifier == 'n':
+                print("Canceling...")
+                break
