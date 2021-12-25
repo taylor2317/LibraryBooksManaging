@@ -30,13 +30,13 @@ Main menu:
      1. loan book   =   (by book name that return the book id to the loan library
                            And by the customer name that returns customer's id to the loan library)
         
-        2.  return book  =  (by book's name that add the date of returned book,
+        2. return book  =  (by book's name that add the date of returned book,
                              And by customer's name that checks if the customer 
                              returned the book in time depends on book's type : 1 = 10 days rental, 2 = 5 days rental , 3 = 2 days rental)
                                     Return book function will add to late_loans(dictionary) the customer if the customer didn't return book on time
                                         (with doing so, when ever the customer want to rent book again, he will have to wait 2 weeks as punishment.)
             
-            3.  display all loans (shows all the loans in library)
+            3. display all loans (shows all the loans in library)
                 
                 4. display all late loans (shows all the late loans by customer id, and the reason he's there)
                 
